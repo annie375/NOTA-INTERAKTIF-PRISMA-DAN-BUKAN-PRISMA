@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Digital: Prisma & Bukan Prisma</title>
+    <style>
+        /* CSS UTAMA */
+        :root {
+            --primary-blue: #3498db;
+            --secondary-green: #2ecc71;
+            --accent-orange: #e67e22;
+            --light-bg: #f0f8ff;
+            --text-dark: #2c3e50;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--white);
+            min-height: 600px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 10px;
+            background: #eee;
+            width: 100%;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--secondary-green), var(--primary-blue));
+            width: 14%;
+            transition: width 0.5s ease;
+        }
+
+        /* Navigation */
+        .nav-buttons {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            background: #fafafa;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:active { transform: scale(0.95); }
+        .btn-next { background: var(--primary-blue); color: white; }
+        .btn-prev { background: #95a5a6; color: white; }
+        .btn-start { background: var(--accent-orange); color: white; padding: 15px 40px; font-size: 1.2rem; }
+        .hidden { display: none !important; }
+
+        /* Pages Layout */
+        .page {
+            flex: 1;
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            overflow-y: auto;
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { color: var(--primary-blue); text-align: center; font-size: 2rem; margin-bottom: 10px; }
+        h2 { color: var(--accent-orange); text-align: center; margin-top: 0; }
+        p { line-height: 1.6; text-align: center; }
+
+        /* Page 1: Hero */
+        .hero { text-align: center; padding-top: 50px; }
+        .hero-img { width: 150px; margin-bottom: 20px; }
+
+        /* Page 2: Objects */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .obj-card {
+            background: #fff;
+            border: 3px solid var(--primary-blue);
+            border-radius: 15px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .obj-card:hover { transform: scale(1.05); background: #eaf6ff; }
+        .obj-card svg { width: 60px; height: 60px; }
+        #info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff9e6;
+            border-left: 5px solid var(--accent-orange);
+            border-radius: 5px;
+            min-height: 50px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Page 3: Prisma Types */
+        .types-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .type-item { 
+            width: 200px; text-align: center; background: #f9f9f9; 
+            padding: 15px; border-radius: 15px; border: 2px dashed #ccc;
+            cursor: pointer;
+        }
+        .shape-svg { width: 100px; height: 100px; margin-bottom: 10px; }
+        .base-highlight { fill: #ff4757 !important; transition: fill 0.3s; }
+        .info-text-prisma { color: #d35400; font-weight: bold; margin-top: 10px; height: 40px; }
+
+        /* Page 4: Animation Section */
+        .cut-box { 
+            position: relative; width: 200px; height: 200px; margin: 20px auto; 
+            border: 2px solid #eee; display: flex; align-items: center; justify-content: center;
+        }
+        .knife {
+            position: absolute; width: 110%; height: 4px; background: red;
+            left: -5%; top: 50%; transform: scaleX(0); transition: transform 0.5s; z-index: 10;
+        }
+        .knife.active { transform: scaleX(1); }
+        .split-shape { transition: transform 0.5s; }
+        .split-shape.active-top { transform: translateY(-20px); }
+        .split-shape.active-bottom { transform: translateY(20px); }
+
+        /* Page 5: Drag & Drop */
+        .dd-container { display: flex; justify-content: space-around; margin-top: 20px; }
+        .drop-zone {
+            width: 45%; min-height: 150px; border: 3px dashed #3498db;
+            border-radius: 15px; padding: 10px; display: flex; flex-wrap: wrap; gap: 5px;
+            background: #fdfdfd; align-content: flex-start;
+        }
+        .drop-zone h3 { width: 100%; text-align: center; margin: 0 0 10px 0; font-size: 0.9rem; }
+        .drag-items { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+        .draggable {
+            width: 80px; padding: 5px; background: white; border: 1px solid #ddd;
+            border-radius: 8px; cursor: move; text-align: center; font-size: 0.7rem;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Page 6: Quiz */
+        .quiz-container { max-width: 500px; margin: 0 auto; }
+        .question { font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn { 
+            padding: 12px; border: 2px solid var(--primary-blue); border-radius: 10px;
+            background: none; text-align: left; cursor: pointer; transition: 0.2s;
+        }
+        .opt-btn:hover { background: #eaf6ff; }
+        .opt-btn.correct { background: var(--secondary-green); color: white; border-color: var(--secondary-green); }
+        .opt-btn.wrong { background: #ff4757; color: white; border-color: #ff4757; }
+        .score-display { text-align: center; font-size: 1.5rem; font-weight: bold; margin-top: 20px; color: var(--primary-blue); }
+
+        /* Page 7: Summary */
+        .summary-card {
+            background: #fff9e6; padding: 25px; border-radius: 20px;
+            border: 2px solid var(--accent-orange); margin: 20px auto; max-width: 500px;
+        }
+        .summary-card ul { text-align: left; list-style-type: '✅ '; }
+        .summary-card li { margin-bottom: 10px; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
+            .type-item { width: 140px; }
+            .drop-zone { width: 48%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- HALAMAN 1: MULA -->
+    <section id="page1" class="page active">
+        <div class="hero">
+            <svg class="hero-img" viewBox="0 0 100 100">
+                <path d="M20 80 L50 65 L80 80 L50 95 Z" fill="#3498db" />
+                <path d="M20 80 L20 40 L50 25 L50 65 Z" fill="#2980b9" />
+                <path d="M50 65 L50 25 L80 40 L80 80 Z" fill="#1f6391" />
+                <path d="M20 40 L50 25 L80 40 L50 55 Z" fill="#5dade2" />
+            </svg>
+            <h1>PRISMA DAN BUKAN PRISMA</h1>
+            <h2>Mari Kenali Bentuk Prisma!</h2>
+            <p>Sains dan Matematik itu menyeronokkan.</p>
+            <button class="btn btn-start" onclick="nextPage()" style="margin: 30px auto;">▶️ Mula Belajar</button>
+        </div>
+    </section>
+
+    <!-- HALAMAN 2: SEKELILING -->
+    <section id="page2" class="page">
+        <h1>Objek di Sekeliling Kita</h1>
+        <p>Klik gambar untuk mengetahui bentuk 3D.</p>
+        <div class="grid-container">
+            <!-- Kotak Hadiah -->
+            <div class="obj-card" onclick="showInfo('Kotak Hadiah', 'Bentuk: Prisma Segi Empat Sama (Kubus)')">
+                <svg viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="50" fill="#e67e22"/><path d="M20 30 L50 10 L80 30" fill="none" stroke="#d35400" stroke-width="3"/><path d="M50 10 L50 80" fill="none" stroke="#d35400" stroke-width="2"/></svg>
+                <span>Hadiah</span>
+            </div>
+            <!-- Kotak Susu -->
+            <div class="obj-card" onclick="showInfo('Kotak Susu', 'Bentuk: Prisma Segi Empat Tepat (Kuboid)')">
+                <svg viewBox="0 0 100 100"><rect x="30" y="20" width="40" height="70" fill="#ecf0f1" stroke="#bdc3c7"/><rect x="30" y="30" width="40" height="15" fill="#3498db"/></svg>
+                <span>Susu</span>
+            </div>
+            <!-- Bumbung -->
+            <div class="obj-card" onclick="showInfo('Bumbung Rumah', 'Bentuk: Prisma Segi Tiga')">
+                <svg viewBox="0 0 100 100"><path d="M10 80 L50 20 L90 80 Z" fill="#c0392b"/><path d="M50 20 L90 20 L90 80 L50 80" fill="#e74c3c"/></svg>
+                <span>Bumbung</span>
+            </div>
+            <!-- Kotak Pensel -->
+            <div class="obj-card" onclick="showInfo('Kotak Pensel', 'Bentuk: Prisma Segi Empat Tepat')">
+                <svg viewBox="0 0 100 100"><rect x="10" y="40" width="80" height="30" rx="5" fill="#9b59b6"/></svg>
+                <span>Kotak Pensel</span>
+            </div>
+            <!-- Tenda -->
+            <div class="obj-card" onclick="showInfo('Tenda/Khemah', 'Bentuk: Prisma Segi Tiga')">
+                <svg viewBox="0 0 100 100"><path d="M20 80 L50 30 L80 80" fill="#2ecc71" stroke="#27ae60" stroke-width="2"/></svg>
+                <span>Tenda</span>
+            </div>
+            <!-- Batu Bata -->
+            <div class="obj-card" onclick="showInfo('Batu Bata', 'Bentuk: Prisma Segi Empat Tepat')">
+                <svg viewBox="0 0 100 100"><rect x="15" y="35" width="70" height="30" fill="#a04000"/></svg>
+                <span>Batu Bata</span>
+            </div>
+        </div>
+        <div id="info-box">Klik mana-mana objek di atas!</div>
+    </section>
+
+    <!-- HALAMAN 3: JENIS PRISMA -->
+    <section id="page3" class="page">
+        <h1>Kenali Jenis Prisma</h1>
+        <p>Klik pada bentuk untuk melihat <b>tapaknya</b>.</p>
+        
+        <div class="types-container">
+            <div class="type-item" onclick="highlightBases('sq')">
+                <svg class="shape-svg" viewBox="0 0 100 100">
+                    <path id="sq-top" d="M30 30 L70 30 L85 15 L45 15 Z" fill="#ccc" stroke="#333"/>
+                    <rect x="30" y="30" width="40" height="40" fill="#ddd" stroke="#333"/>
+                    <path d="M70 30 L85 15 L85 55 L70 70 Z" fill="#bbb" stroke="#333"/>
+                    <path id="sq-bottom" d="M30 70 L70 70 L85 55 L45 55 Z" fill="#ccc" stroke="#333" opacity="0.3"/>
+                </svg>
+                <b>Segi Empat Sama</b>
+            </div>
+
+            <div class="type-item" onclick="highlightBases('rect')">
+                <svg class="shape-svg" viewBox="0 0 100 100">
+                    <path id="rect-top" d="M20 30 L80 30 L90 20 L30 20 Z" fill="#ccc" stroke="#333"/>
+                    <rect x="20" y="30" width="60" height="40" fill="#ddd" stroke="#333"/>
+                    <path d="M80 30 L90 20 L90 60 L80 70 Z" fill="#bbb" stroke="#333"/>
+                    <path id="rect-bottom" d="M20 70 L80 70 L90 60 L30 60 Z" fill="#ccc" stroke="#333" opacity="0.3"/>
+                </svg>
+                <b>Segi Empat Tepat</b>
+            </div>
+
+            <div class="type-item" onclick="highlightBases('tri')">
+                <svg class="shape-svg" viewBox="0 0 100 100">
+                    <path id="tri-top" d="M20 70 L50 20 L80 70 Z" fill="#ccc" stroke="#333"/>
+                    <path d="M50 20 L80 20 L110 70 L80 70 Z" fill="#ddd" stroke="#333"/>
+                    <path id="tri-bottom" d="M50 70 L80 70 L110 70 Z" fill="#bbb" stroke="#333" opacity="0"/>
+                    <!-- Simplified representation for learning -->
+                </svg>
+                <b>Segi Tiga</b>
+            </div>
+        </div>
+        <div id="prisma-msg" class="info-text-prisma"></div>
+    </section>
+
+    <!-- HALAMAN 4: AKTIVITI POTONG -->
+    <section id="page4" class="page">
+        <h1>Aktiviti Pemerhatian</h1>
+        <p>Mari kita lihat apa yang berlaku jika kita potong prisma ini.</p>
+        <div style="text-align:center;">
+            <button class="btn btn-next" style="margin: 0 auto 20px;" onclick="animateCut()">🔪 Klik Untuk Potong</button>
+        </div>
+
+        <div class="cut-box">
+            <div id="knife" class="knife"></div>
+            <!-- Cake/Cuboid split into two -->
+            <svg id="cake-svg" width="120" height="120" viewBox="0 0 100 100">
+                <g id="top-half" class="split-shape">
+                    <rect x="20" y="20" width="60" height="30" fill="#f39c12" stroke="#d35400"/>
+                    <path d="M20 20 L40 5 L100 5 L80 20 Z" fill="#e67e22" stroke="#d35400"/>
+                </g>
+                <g id="bottom-half" class="split-shape">
+                    <rect x="20" y="50" width="60" height="30" fill="#f39c12" stroke="#d35400"/>
+                </g>
+            </svg>
+        </div>
+        
+        <div id="cut-result" style="opacity:0; text-align:center; transition: 0.5s;">
+            <p style="color:var(--secondary-green); font-weight:bold;">Keratan Rentas yang sama bentuk!</p>
+            <p>Dua permukaan bertentangan adalah serupa walaupun dipotong.</p>
+        </div>
+    </section>
+
+    <!-- HALAMAN 5: PETA MINDA (DRAG DROP) -->
+    <section id="page5" class="page">
+        <h1>Prisma atau Bukan Prisma?</h1>
+        <p>Suaikan gambar ke kategori yang betul.</p>
+        
+        <div class="dd-container">
+            <div class="drop-zone" id="zone-prisma" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <h3>PRISMA</h3>
+            </div>
+            <div class="drop-zone" id="zone-bukan" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <h3>BUKAN PRISMA</h3>
+            </div>
+        </div>
+
+        <div class="drag-items" id="items-pool">
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item1" data-type="prisma">Kubus</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item2" data-type="prisma">Kuboid</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item3" data-type="prisma">Prisma Segi Tiga</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item4" data-type="bukan">Silinder</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item5" data-type="bukan">Kon</div>
+            <div class="draggable" draggable="true" ondragstart="drag(event)" id="item6" data-type="bukan">Sfera</div>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn btn-next" onclick="checkDragDrop()" style="margin:auto;">Semak Jawapan</button>
+            <p id="dd-feedback"></p>
+        </div>
+    </section>
+
+    <!-- HALAMAN 6: KUIZ -->
+    <section id="page6" class="page">
+        <h1>Uji Minda</h1>
+        <div class="quiz-container" id="quiz-box">
+            <!-- Dinamik dari JS -->
+        </div>
+        <div id="quiz-result" class="score-display"></div>
+    </section>
+
+    <!-- HALAMAN 7: RUMUSAN -->
+    <section id="page7" class="page">
+        <h1>Rumusan</h1>
+        <div class="summary-card">
+            <h3>Saya telah belajar bahawa:</h3>
+            <ul>
+                <li>Prisma mempunyai <b>dua permukaan bertentangan</b> yang sama bentuk (tapak).</li>
+                <li>Nama prisma diberi berdasarkan <b>bentuk tapaknya</b>.</li>
+                <li><b>Keratan rentas</b> prisma sentiasa seragam.</li>
+                <li>Tidak semua bentuk 3D ialah prisma (cth: Kon, Sfera).</li>
+            </ul>
+        </div>
+        <div style="text-align:center;">
+            <p>⭐⭐ Tahat Hebat! ⭐⭐</p>
+            <button class="btn btn-start" onclick="resetAll()" style="margin:20px auto;">🔄 Ulang Semula</button>
+        </div>
+    </section>
+
+    <!-- FOOTER NAV -->
+    <div class="nav-buttons" id="nav-container">
+        <button class="btn btn-prev" id="prevBtn" onclick="prevPage()">Sebelumnya</button>
+        <span id="page-num" style="align-self:center; font-weight:bold;">1 / 7</span>
+        <button class="btn btn-next" id="nextBtn" onclick="nextPage()">Seterusnya</button>
+    </div>
+</div>
+
+<script>
+    // DATA & STATE
+    let currentPage = 1;
+    const totalPages = 7;
+
+    const quizData = [
+        {
+            q: "Kotak susu biasanya berbentuk...",
+            a: ["Prisma Segi Empat Tepat", "Kon", "Silinder"],
+            correct: 0
+        },
+        {
+            q: "Prisma dinamakan berdasarkan bentuk...",
+            a: ["Warna", "Tapaknya", "Beratnya"],
+            correct: 1
+        },
+        {
+            q: "Manakah antara berikut ialah prisma?",
+            a: ["Sfera", "Kon", "Kubus"],
+            correct: 2
+        },
+        {
+            q: "Prisma segi tiga mempunyai tapak berbentuk...",
+            a: ["Bulatan", "Segi Tiga", "Segi Empat"],
+            correct: 1
+        },
+        {
+            q: "Adakah silinder sebuah prisma?",
+            a: ["Ya", "Bukan", "Mungkin"],
+            correct: 1
+        }
+    ];
+
+    // NAVIGASI
+    function updateUI() {
+        // Show/Hide pages
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(`page${currentPage}`).classList.add('active');
+
+        // Progress bar
+        const progress = (currentPage / totalPages) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+
+        // Nav buttons
+        const nav = document.getElementById('nav-container');
+        if (currentPage === 1 || currentPage === totalPages) {
+            nav.classList.add('hidden');
+        } else {
+            nav.classList.remove('hidden');
+        }
+
+        document.getElementById('page-num').innerText = `${currentPage} / ${totalPages}`;
+
+        // Load Quiz if on page 6
+        if (currentPage === 6) loadQuiz();
+    }
+
+    function nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateUI();
+        }
+    }
+
+    function prevPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            updateUI();
+        }
+    }
+
+    // PAGE 2 LOGIC
+    function showInfo(title, desc) {
+        const box = document.getElementById('info-box');
+        box.innerHTML = `<strong>${title}</strong><br>${desc}`;
+        box.style.backgroundColor = "#e1f5fe";
+    }
+
+    // PAGE 3 LOGIC
+    function highlightBases(type) {
+        // Reset colors
+        document.querySelectorAll('.shape-svg path, .shape-svg rect').forEach(el => {
+            if(el.id.includes('top') || el.id.includes('bottom')) {
+                el.classList.remove('base-highlight');
+            }
+        });
+
+        // Highlight
+        document.getElementById(`${type}-top`).classList.add('base-highlight');
+        const bottom = document.getElementById(`${type}-bottom`);
+        if(bottom) {
+            bottom.classList.add('base-highlight');
+            bottom.style.opacity = "1";
+        }
+
+        document.getElementById('prisma-msg').innerText = "Nama prisma diberi berdasarkan dua permukaan bertentangan yang sama bentuk.";
+    }
+
+    // PAGE 4 LOGIC
+    function animateCut() {
+        const knife = document.getElementById('knife');
+        const top = document.getElementById('top-half');
+        const bottom = document.getElementById('bottom-half');
+        const result = document.getElementById('cut-result');
+
+        knife.classList.add('active');
+        
+        setTimeout(() => {
+            top.classList.add('active-top');
+            bottom.classList.add('active-bottom');
+            result.style.opacity = "1";
+        }, 600);
+    }
+
+    // PAGE 5 LOGIC (DRAG DROP)
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData("text");
+        const el = document.getElementById(data);
+        if (ev.target.classList.contains('drop-zone')) {
+            ev.target.appendChild(el);
+        }
+    }
+
+    function checkDragDrop() {
+        const pZone = document.getElementById('zone-prisma');
+        const bZone = document.getElementById('zone-bukan');
+        const feedback = document.getElementById('dd-feedback');
+        
+        let correct = true;
+        
+        pZone.querySelectorAll('.draggable').forEach(item => {
+            if(item.dataset.type !== 'prisma') correct = false;
+        });
+        bZone.querySelectorAll('.draggable').forEach(item => {
+            if(item.dataset.type !== 'bukan') correct = false;
+        });
+
+        // Check if all moved
+        if(document.getElementById('items-pool').children.length > 0) {
+            feedback.innerText = "Sila masukkan semua gambar ke dalam kotak!";
+            feedback.style.color = "red";
+            return;
+        }
+
+        if(correct) {
+            feedback.innerText = "🎉 Syabas! Semua jawapan betul!";
+            feedback.style.color = "green";
+        } else {
+            feedback.innerText = "Cuba lagi! Periksa semula kategori anda.";
+            feedback.style.color = "orange";
+        }
+    }
+
+    // PAGE 6 LOGIC (QUIZ)
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuiz() {
+        const container = document.getElementById('quiz-box');
+        const qData = quizData[currentQ];
+        
+        if (currentQ >= quizData.length) {
+            container.innerHTML = "";
+            document.getElementById('quiz-result').innerText = `Skor Anda: ${score} / ${quizData.length}`;
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="question">${currentQ + 1}. ${qData.q}</div>
+            <div class="options">
+                ${qData.a.map((opt, i) => `
+                    <button class="opt-btn" onclick="checkAnswer(${i})">${opt}</button>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function checkAnswer(idx) {
+        const qData = quizData[currentQ];
+        const btns = document.querySelectorAll('.opt-btn');
+        
+        if (idx === qData.correct) {
+            btns[idx].classList.add('correct');
+            score++;
+        } else {
+            btns[idx].classList.add('wrong');
+            btns[qData.correct].classList.add('correct');
+        }
+
+        // Disable all buttons
+        btns.forEach(b => b.disabled = true);
+
+        setTimeout(() => {
+            currentQ++;
+            loadQuiz();
+        }, 1500);
+    }
+
+    function resetAll() {
+        currentPage = 1;
+        currentQ = 0;
+        score = 0;
+        document.getElementById('quiz-result').innerText = "";
+        
+        // Reset Drag Drop
+        const pool = document.getElementById('items-pool');
+        document.querySelectorAll('.draggable').forEach(item => pool.appendChild(item));
+        document.getElementById('dd-feedback').innerText = "";
+
+        // Reset Animation
+        document.getElementById('knife').classList.remove('active');
+        document.getElementById('top-half').classList.remove('active-top');
+        document.getElementById('bottom-half').classList.remove('active-bottom');
+        document.getElementById('cut-result').style.opacity = "0";
+
+        updateUI();
+    }
+
+    // Init
+    updateUI();
+</script>
+
+</body>
+</html>
