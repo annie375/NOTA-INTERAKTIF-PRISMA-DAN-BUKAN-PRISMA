@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CABARAN JUARA PECAHAN 🏆 - Matematik Tahun 2</title>
+    <!-- Fon bulat mesra kanak-kanak dari Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================================
+           1. TEMA PASTEL & PEMBOLEH UBAH REKA BENTUK KARTUN 2D
+           ========================================================= */
+        :root {
+            --bg-cream: #FFFDF8;
+            --pastel-pink: #FFD6E0;
+            --pastel-pink-dark: #FF758F;
+            --pastel-yellow: #FFF3B0;
+            --pastel-yellow-dark: #F4A261;
+            --pastel-blue: #CDE8F6;
+            --pastel-blue-dark: #4EA8DE;
+            --pastel-mint: #D4F4DD;
+            --pastel-mint-dark: #40916C;
+            --pastel-purple: #E5D4F3;
+            --pastel-purple-dark: #9D4EDD;
+            --text-dark: #2B2D42;
+            --text-muted: #5A6075;
+            --white: #FFFFFF;
+            --shadow-card: 0 12px 30px rgba(43, 45, 66, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Fredoka', 'Nunito', 'Comic Sans MS', sans-serif;
+            background-color: var(--bg-cream);
+            background-image:
+                radial-gradient(var(--pastel-pink) 3px, transparent 3px),
+                radial-gradient(var(--pastel-blue) 3px, var(--bg-cream) 3px);
+            background-size: 46px 46px;
+            background-position: 0 0, 23px 23px;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 880px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* =========================================================
+           2. PENGEPALA PERMAINAN
+           ========================================================= */
+        .game-header {
+            background: linear-gradient(135deg, var(--pastel-yellow) 0%, var(--pastel-pink) 55%, var(--pastel-purple) 100%);
+            border: 4px solid var(--white);
+            border-radius: 28px;
+            padding: 14px 56px 14px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+            position: relative;
+        }
+
+        .game-title {
+            font-size: clamp(1.5rem, 4.3vw, 2.35rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            text-shadow: 2px 2px 0px var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .game-subtitle {
+            font-size: clamp(0.92rem, 2.3vw, 1.1rem);
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .btn-sound {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 3px solid var(--pastel-blue-dark);
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 0 var(--pastel-blue-dark);
+            transition: transform 0.12s;
+        }
+
+        .btn-sound:active {
+            transform: translateY(calc(-50% + 3px));
+            box-shadow: none;
+        }
+
+        /* =========================================================
+           3. KAD SKRIN UTAMA
+           ========================================================= */
+        .screen-card {
+            background: var(--white);
+            border: 4px solid var(--pastel-blue);
+            border-radius: 32px;
+            padding: clamp(18px, 3.6vw, 30px);
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            animation: cardPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes cardPopIn {
+            0% { opacity: 0; transform: scale(0.94) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* =========================================================
+           4. SKRIN MULA & RINGKASAN 3 MISI
+           ========================================================= */
+        .hero-mascot {
+            width: 145px;
+            height: 145px;
+            margin: 0 auto 8px;
+            animation: gentleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .mission-overview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 18px 0 24px;
+        }
+
+        @media (max-width: 680px) {
+            .mission-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mission-card {
+            border-radius: 22px;
+            padding: 14px 16px;
+            text-align: left;
+            border: 3px solid;
+        }
+
+        .mission-card.m-a {
+            background: var(--pastel-pink);
+            border-color: var(--pastel-pink-dark);
+        }
+
+        .mission-card.m-b {
+            background: var(--pastel-yellow);
+            border-color: var(--pastel-yellow-dark);
+        }
+
+        .mission-card.m-c {
+            background: var(--pastel-mint);
+            border-color: var(--pastel-mint-dark);
+        }
+
+        .mission-card h3 {
+            font-size: 1.12rem;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+
+        .mission-card p {
+            font-size: 0.96rem;
+            line-height: 1.4;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* =========================================================
+           5. BUTANG KARTUN 3D COMEL
+           ========================================================= */
+        .btn-cartoon {
+            border: 4px solid;
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-family: inherit;
+            font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.12s ease, filter 0.15s ease;
+        }
+
+        .btn-cartoon:hover:not(:disabled) {
+            transform: translateY(-2px);
+            filter: brightness(1.04);
+        }
+
+        .btn-cartoon:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 currentColor !important;
+        }
+
+        .btn-cartoon:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-start {
+            background: linear-gradient(180deg, #FFD166 0%, #F4A261 100%);
+            color: #5C2C06;
+            border-color: #B45309;
+            box-shadow: 0 6px 0 #B45309;
+            font-size: 1.4rem;
+            padding: 16px 40px;
+        }
+
+        .btn-check {
+            background: linear-gradient(180deg, #80ED99 0%, #57CC99 100%);
+            color: #1B4332;
+            border-color: #2D6A4F;
+            box-shadow: 0 6px 0 #2D6A4F;
+        }
+
+        .btn-next {
+            background: linear-gradient(180deg, #90E0EF 0%, #48CAE4 100%);
+            color: #03045E;
+            border-color: #0077B6;
+            box-shadow: 0 6px 0 #0077B6;
+            margin-top: 12px;
+        }
+
+        /* =========================================================
+           6. HUD (KEMAJUAN, LENCANA BAHAGIAN & MARKAH)
+           ========================================================= */
+        .hud-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: var(--pastel-purple);
+            border: 3px solid var(--pastel-purple-dark);
+            border-radius: 22px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .hud-chip {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 6px 14px;
+            font-size: 1.02rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .hud-section-badge {
+            background: var(--pastel-pink);
+            color: #800F2F;
+            border: 2px solid var(--pastel-pink-dark);
+        }
+
+        .hud-score-badge {
+            background: var(--pastel-yellow);
+            color: #7F4F24;
+            border: 2px solid var(--pastel-yellow-dark);
+        }
+
+        .hud-progress-track {
+            flex: 1;
+            min-width: 130px;
+            height: 14px;
+            background: var(--white);
+            border-radius: 20px;
+            border: 2px solid var(--pastel-purple-dark);
+            overflow: hidden;
+        }
+
+        .hud-progress-fill {
+            height: 100%;
+            width: 8.33%;
+            background: linear-gradient(90deg, #FF758F, #FFD166, #57CC99);
+            border-radius: 20px;
+            transition: width 0.35s ease;
+        }
+
+        /* =========================================================
+           7. WATAK KARTUN PEMBERI CABARAN & BUIH DIALOG
+           ========================================================= */
+        .challenger-strip {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #F8FAFC;
+            border: 3px solid var(--pastel-blue);
+            border-radius: 24px;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .challenger-avatar {
+            width: 68px;
+            height: 68px;
+            flex-shrink: 0;
+        }
+
+        .speech-bubble {
+            background: var(--white);
+            border: 2px solid var(--pastel-blue-dark);
+            border-radius: 18px;
+            padding: 10px 14px;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+            flex: 1;
+            position: relative;
+        }
+
+        .question-heading {
+            font-size: clamp(1.2rem, 3.1vw, 1.55rem);
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        /* =========================================================
+           8. PAPARAN PECAHAN BERTINGKAT
+           ========================================================= */
+        .frac-stack {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 700;
+            line-height: 1.05;
+            vertical-align: middle;
+        }
+
+        .frac-bar {
+            width: 100%;
+            min-width: 28px;
+            height: 3.5px;
+            background: currentColor;
+            border-radius: 4px;
+            margin: 2px 0;
+        }
+
+        /* =========================================================
+           9. BAHAGIAN A: PERBANDINGAN DUA PECAHAN SAMA SAIZ
+           ========================================================= */
+        .compare-arena {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 14px;
+            margin: 0 auto 20px;
+            max-width: 680px;
+        }
+
+        @media (max-width: 620px) {
+            .compare-arena {
+                grid-template-columns: 1fr;
+                max-width: 340px;
+            }
+            .vs-pill {
+                margin: 0 auto;
+            }
+        }
+
+        .compare-box {
+            background: #F8FAFC;
+            border: 3px dashed var(--pastel-blue-dark);
+            border-radius: 24px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compare-box svg {
+            width: 175px;
+            height: 175px;
+            max-width: 100%;
+        }
+
+        .compare-frac-label {
+            background: var(--pastel-yellow);
+            border: 2px solid var(--pastel-yellow-dark);
+            border-radius: 16px;
+            padding: 4px 16px;
+            font-size: 1.45rem;
+            color: #7F4F24;
+        }
+
+        .vs-pill {
+            background: var(--pastel-pink);
+            border: 3px solid var(--pastel-pink-dark);
+            color: #800F2F;
+            font-weight: 800;
+            font-size: 1.15rem;
+            padding: 8px 14px;
+            border-radius: 50px;
+        }
+
+        /* =========================================================
+           10. PILIHAN JAWAPAN 3 BUTANG (BAHAGIAN A & C)
+           ========================================================= */
+        .options-3-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 580px) {
+            .options-3-grid {
+                grid-template-columns: 1fr;
+                max-width: 320px;
+            }
+        }
+
+        .choice-btn {
+            background: var(--white);
+            border: 4px solid var(--pastel-blue-dark);
+            border-radius: 22px;
+            padding: 14px 12px;
+            min-height: 92px;
+            font-family: inherit;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--pastel-blue-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: transform 0.12s ease, background-color 0.15s ease;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            background-color: #F0F9FF;
+        }
+
+        .choice-btn:active:not(:disabled) {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 var(--pastel-blue-dark);
+        }
+
+        .choice-btn.is-correct {
+            background: var(--pastel-mint);
+            border-color: #2D6A4F;
+            box-shadow: 0 6px 0 #2D6A4F;
+            color: #1B4332;
+        }
+
+        .choice-btn.is-wrong {
+            background: var(--pastel-pink);
+            border-color: #D90429;
+            box-shadow: 0 6px 0 #D90429;
+            color: #800F2F;
+            animation: shakeBtn 0.4s ease;
+        }
+
+        .choice-btn:disabled {
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        @keyframes shakeBtn {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-7px); }
+            50% { transform: translateX(7px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        /* =========================================================
+           11. BAHAGIAN B: SUSUN PECAHAN (DRAG & DROP + SENTUH/KLIK)
+           ========================================================= */
+        .sort-guide {
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
+
+        .slots-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            max-width: 660px;
+            margin: 0 auto 18px;
+        }
+
+        @media (max-width: 580px) {
+            .slots-row {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+        }
+
+        .sort-slot {
+            background: #F8FAFC;
+            border: 3px dashed var(--pastel-purple-dark);
+            border-radius: 24px;
+            padding: 12px;
+            min-height: 165px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.15s, transform 0.15s;
+        }
+
+        .sort-slot.drag-over {
+            background: var(--pastel-purple);
+            transform: scale(1.03);
+        }
+
+        .slot-header {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #5A189A;
+            background: var(--pastel-purple);
+            padding: 3px 12px;
+            border-radius: 50px;
+        }
+
+        .slot-placeholder {
+            color: #94A3B8;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: auto 0;
+        }
+
+        .slot-arrows {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .arrow-mini-btn {
+            background: var(--white);
+            border: 2px solid var(--pastel-purple-dark);
+            border-radius: 10px;
+            padding: 4px 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #5A189A;
+        }
+
+        .arrow-mini-btn:active {
+            background: var(--pastel-purple);
+        }
+
+        .cards-pool {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            min-height: 125px;
+            background: var(--pastel-yellow);
+            border: 3px solid var(--pastel-yellow-dark);
+            border-radius: 24px;
+            padding: 14px;
+            max-width: 660px;
+            margin: 0 auto 18px;
+        }
+
+        .frac-card {
+            background: var(--white);
+            border: 4px solid var(--pastel-blue-dark);
+            border-radius: 20px;
+            padding: 10px 16px;
+            min-width: 120px;
+            cursor: grab;
+            box-shadow: 0 5px 0 var(--pastel-blue-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s ease;
+        }
+
+        .frac-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .frac-card:active {
+            cursor: grabbing;
+        }
+
+        .frac-card .frac-stack {
+            font-size: 1.55rem;
+            color: var(--text-dark);
+        }
+
+        .mini-bar-svg {
+            width: 96px;
+            height: 22px;
+        }
+
+        /* =========================================================
+           12. BAHAGIAN C: ILUSTRASI CERITA MASALAH HARIAN
+           ========================================================= */
+        .story-illustration {
+            background: #F8FAFC;
+            border: 3px dashed var(--pastel-mint-dark);
+            border-radius: 24px;
+            padding: 14px;
+            margin: 0 auto 18px;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .story-illustration svg {
+            width: 100%;
+            max-width: 340px;
+            height: auto;
+            max-height: 185px;
+        }
+
+        /* =========================================================
+           13. KOTAK MAKLUM BALAS & PENERANGAN
+           ========================================================= */
+        .feedback-box {
+            margin-top: 18px;
+            border-radius: 24px;
+            padding: 16px 20px;
+            animation: cardPopIn 0.3s ease;
+        }
+
+        .feedback-box.correct {
+            background: var(--pastel-mint);
+            border: 3px solid var(--pastel-mint-dark);
+            color: #1B4332;
+        }
+
+        .feedback-box.wrong {
+            background: var(--pastel-yellow);
+            border: 3px solid var(--pastel-yellow-dark);
+            color: #6C3B00;
+            animation: shakeBtn 0.4s ease;
+        }
+
+        .feedback-heading {
+            font-size: clamp(1.2rem, 3vw, 1.45rem);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .feedback-detail {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 1.04rem;
+            line-height: 1.5;
+            color: var(--text-dark);
+            max-width: 560px;
+            margin: 6px auto 0;
+        }
+
+        /* =========================================================
+           14. SKRIN KEMENANGAN & GANJARAN PINGAT
+           ========================================================= */
+        .trophy-badge {
+            background: linear-gradient(135deg, var(--pastel-yellow), #FFD166);
+            border: 4px solid var(--pastel-yellow-dark);
+            border-radius: 26px;
+            padding: 16px 24px;
+            display: inline-block;
+            margin: 12px auto;
+            box-shadow: 0 8px 20px rgba(244, 162, 97, 0.3);
+        }
+
+        .medal-title {
+            font-size: clamp(1.5rem, 4vw, 2.1rem);
+            font-weight: 800;
+            color: #7F4F24;
+        }
+
+        .final-score-pill {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-top: 6px;
+        }
+
+        .victory-desc {
+            font-size: 1.15rem;
+            line-height: 1.55;
+            max-width: 540px;
+            margin: 12px auto 22px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Kanvas Konfeti & Bintang */
+        #fx-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fx-canvas"></canvas>
+
+    <div class="app-container">
+        <!-- Pengepala -->
+        <header class="game-header">
+            <h1 class="game-title">CABARAN JUARA PECAHAN 🏆</h1>
+            <p class="game-subtitle">Bandingkan pecahan wajar, susun tertib, dan selesaikan misi harian!</p>
+            <button id="btn-sound" class="btn-sound" title="Tukar Bunyi" aria-label="Tukar Bunyi">🔊</button>
+        </header>
+
+        <!-- =========================================================
+             SKRIN 1: MULA CABARAN
+             ========================================================= -->
+        <main id="start-screen" class="screen-card">
+            <!-- Watak Kartun Kanak-kanak Juara Pecahan (SVG) -->
+            <div class="hero-mascot">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Jubah Juara -->
+                    <path d="M48 180 C48 135, 152 135, 152 180 Z" fill="#4EA8DE" stroke="#1D3557" stroke-width="5"/>
+                    <polygon points="100,138 78,175 100,165 122,175" fill="#FFD166" stroke="#1D3557" stroke-width="3"/>
+                    <!-- Kepala -->
+                    <circle cx="100" cy="95" r="46" fill="#FFE5D9" stroke="#5C2C06" stroke-width="5"/>
+                    <!-- Rambut Comel -->
+                    <path d="M54 90 C50 42, 150 42, 146 90 C140 66, 118 58, 100 66 C82 58, 60 66, 54 90 Z" fill="#3D2C2E"/>
+                    <!-- Pipi Merah Jambu -->
+                    <ellipse cx="75" cy="105" rx="7" ry="4" fill="#FF758F" opacity="0.75"/>
+                    <ellipse cx="125" cy="105" rx="7" ry="4" fill="#FF758F" opacity="0.75"/>
+                    <!-- Mata Bersemangat -->
+                    <circle cx="84" cy="92" r="5.5" fill="#2B2D42"/>
+                    <circle cx="86" cy="90" r="2" fill="#FFFFFF"/>
+                    <circle cx="116" cy="92" r="5.5" fill="#2B2D42"/>
+                    <circle cx="118" cy="90" r="2" fill="#FFFFFF"/>
+                    <!-- Senyuman Ceria -->
+                    <path d="M88 108 Q100 120 112 108" fill="none" stroke="#2B2D42" stroke-width="4" stroke-linecap="round"/>
+                    <!-- Mahkota Juara -->
+                    <polygon points="68,54 76,30 92,46 100,24 108,46 124,30 132,54" fill="#FFD166" stroke="#B45309" stroke-width="4" stroke-linejoin="round"/>
+                    <!-- Piala Kecil di Tangan -->
+                    <path d="M150 130 L172 130 L168 150 L154 150 Z" fill="#FFD166" stroke="#B45309" stroke-width="3"/>
+                    <rect x="158" y="150" width="6" height="10" fill="#B45309"/>
+                    <rect x="152" y="160" width="18" height="5" rx="2" fill="#B45309"/>
+                </svg>
+            </div>
+
+            <h2 style="font-size: 1.5rem; color: #2B2D42; margin-bottom: 6px;">Hai! Saya Arif, Kapten Pecahan! 👋</h2>
+            <p style="font-size: 1.08rem; color: var(--text-muted); max-width: 580px; margin: 0 auto;">
+                Selesaikan <strong>12 soalan</strong> dalam 3 misi menarik untuk memenangi Pingat Juara Pecahan!
+            </p>
+
+            <!-- Ringkasan 3 Misi -->
+            <div class="mission-overview">
+                <div class="mission-card m-a">
+                    <h3>🍕 Bahagian A (4 Soalan)</h3>
+                    <p><strong>Siapa Lebih Besar?</strong> Bandingkan dua gambar rajah pecahan yang sama saiz.</p>
+                </div>
+                <div class="mission-card m-b">
+                    <h3>🧩 Bahagian B (4 Soalan)</h3>
+                    <p><strong>Susun Pecahan:</strong> Susun 3 pecahan daripada paling kecil ke paling besar.</p>
+                </div>
+                <div class="mission-card m-c">
+                    <h3>🎂 Bahagian C (4 Soalan)</h3>
+                    <p><strong>Penyelesaian Masalah:</strong> Selesaikan cerita pecahan dalam kehidupan seharian.</p>
+                </div>
+            </div>
+
+            <button id="btn-start" class="btn-cartoon btn-start">
+                <span>Mula Cabaran</span> <span>🚀</span>
+            </button>
+        </main>
+
+        <!-- =========================================================
+             SKRIN 2: ARENA PERMAINAN (12 SOALAN)
+             ========================================================= -->
+        <section id="game-screen" class="screen-card hidden">
+            <!-- Bar HUD Atas -->
+            <div class="hud-bar">
+                <div class="hud-chip">
+                    <span>📌</span>
+                    <span id="hud-q-num">Soalan 1/12</span>
+                </div>
+                <div id="hud-section" class="hud-chip hud-section-badge">Bahagian A</div>
+                <div class="hud-progress-track" aria-hidden="true">
+                    <div id="hud-progress-fill" class="hud-progress-fill"></div>
+                </div>
+                <div class="hud-chip hud-score-badge">
+                    <span>⭐ Markah:</span>
+                    <span id="hud-score">0</span>
+                </div>
+            </div>
+
+            <!-- Watak Pemberi Cabaran & Buih Dialog -->
+            <div class="challenger-strip">
+                <div id="challenger-face" class="challenger-avatar"></div>
+                <div id="challenger-speech" class="speech-bubble">
+                    Perhatikan kedua-dua gambar rajah sama saiz ini. Yang manakah lebih besar?
+                </div>
+            </div>
+
+            <!-- Teks Soalan -->
+            <h2 id="question-title" class="question-heading"></h2>
+
+            <!-- Kawasan Dinamik Mengikut Bahagian A, B atau C -->
+            <div id="dynamic-arena"></div>
+
+            <!-- Kotak Maklum Balas -->
+            <div id="feedback-box" class="feedback-box hidden">
+                <div id="feedback-heading" class="feedback-heading"></div>
+                <div id="feedback-detail" class="feedback-detail"></div>
+                <button id="btn-next" class="btn-cartoon btn-next hidden">
+                    <span>Seterusnya</span> <span>➡️</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             SKRIN 3: KEMENANGAN & GANJARAN PINGAT
+             ========================================================= -->
+        <section id="end-screen" class="screen-card hidden">
+            <h2 style="font-size: 2rem; color: #2B2D42;">Cabaran Tamat! 🎉</h2>
+
+            <div class="trophy-badge">
+                <div id="reward-title" class="medal-title">Juara Pecahan Emas 🥇</div>
+                <div class="final-score-pill">Markah Akhir: <span id="final-score">120</span> / 120</div>
+            </div>
+
+            <p id="victory-message" class="victory-desc">
+                Luar biasa! Kamu telah menguasai perbandingan dan penyelesaian masalah Pecahan Wajar Tahun 2!
+            </p>
+
+            <button id="btn-restart" class="btn-cartoon btn-start">
+                <span>Main Semula</span> <span>🔄</span>
+            </button>
+        </section>
+    </div>
+
+    <script>
+        /* =========================================================
+           1. KESAN BUNYI CERIA (WEB AUDIO API)
+           ========================================================= */
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AC = window.AudioContext || window.webkitAudioContext;
+                if (AC) audioCtx = new AC();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTone(freq, type, duration, delay = 0, vol = 0.16) {
+            if (!soundEnabled) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + delay);
+
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + delay + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + delay);
+            osc.stop(audioCtx.currentTime + delay + duration);
+        }
+
+        function playPopSound() {
+            playTone(540, 'sine', 0.09, 0, 0.14);
+        }
+
+        function playSuccessSound() {
+            playTone(523.25, 'triangle', 0.18, 0.00, 0.2);
+            playTone(659.25, 'triangle', 0.18, 0.09, 0.2);
+            playTone(783.99, 'triangle', 0.18, 0.18, 0.2);
+            playTone(1046.50, 'triangle', 0.38, 0.27, 0.22);
+        }
+
+        function playGentleTrySound() {
+            playTone(330, 'sine', 0.18, 0.00, 0.15);
+            playTone(261.63, 'sine', 0.24, 0.14, 0.15);
+        }
+
+        function playVictoryFanfare() {
+            const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+            const times = [0, 0.12, 0.24, 0.36, 0.52, 0.66];
+            notes.forEach((n, i) => playTone(n, 'triangle', 0.28, times[i], 0.2));
+        }
+
+        /* =========================================================
+           2. ANIMASI BINTANG & KONFETI (CANVAS)
+           ========================================================= */
+        const fxCanvas = document.getElementById('fx-canvas');
+        const fxCtx = fxCanvas.getContext('2d');
+        let particles = [];
+        let animId = null;
+
+        function resizeFxCanvas() {
+            fxCanvas.width = window.innerWidth;
+            fxCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeFxCanvas);
+        resizeFxCanvas();
+
+        function drawStar(ctx, cx, cy, rOuter, rInner, color) {
+            let rot = (Math.PI / 2) * 3;
+            const step = Math.PI / 5;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - rOuter);
+            for (let i = 0; i < 5; i++) {
+                ctx.lineTo(cx + Math.cos(rot) * rOuter, cy + Math.sin(rot) * rOuter);
+                rot += step;
+                ctx.lineTo(cx + Math.cos(rot) * rInner, cy + Math.sin(rot) * rInner);
+                rot += step;
+            }
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+        }
+
+        function spawnCelebration(count = 55, includeConfetti = false) {
+            const palette = ['#FFD166', '#FF758F', '#4EA8DE', '#57CC99', '#9D4EDD', '#FF9F1C'];
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: includeConfetti ? Math.random() * fxCanvas.width : fxCanvas.width * (0.25 + Math.random() * 0.5),
+                    y: includeConfetti ? -20 - Math.random() * 140 : fxCanvas.height * (0.3 + Math.random() * 0.25),
+                    vx: includeConfetti ? (Math.random() - 0.5) * 4 : (Math.random() - 0.5) * 10,
+                    vy: includeConfetti ? 2.5 + Math.random() * 4 : -4 - Math.random() * 8,
+                    gravity: includeConfetti ? 0.04 : 0.25,
+                    size: 9 + Math.random() * 9,
+                    rot: Math.random() * Math.PI * 2,
+                    vRot: (Math.random() - 0.5) * 0.18,
+                    alpha: 1,
+                    isConfetti: includeConfetti && Math.random() > 0.45,
+                    color: palette[Math.floor(Math.random() * palette.length)]
+                });
+            }
+            if (!animId) updateFx();
+        }
+
+        function updateFx() {
+            fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += p.gravity;
+                p.rot += p.vRot;
+                if (!p.isConfetti) p.alpha -= 0.014;
+
+                if (p.alpha > 0) {
+                    fxCtx.save();
+                    fxCtx.globalAlpha = p.alpha;
+                    fxCtx.translate(p.x, p.y);
+                    fxCtx.rotate(p.rot);
+                    if (p.isConfetti) {
+                        fxCtx.fillStyle = p.color;
+                        fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    } else {
+                        drawStar(fxCtx, 0, 0, p.size, p.size * 0.45, p.color);
+                    }
+                    fxCtx.restore();
+                }
+            });
+
+            particles = particles.filter(p => p.alpha > 0 && p.y < fxCanvas.height + 40);
+            if (particles.length > 0) {
+                animId = requestAnimationFrame(updateFx);
+            } else {
+                animId = null;
+            }
+        }
+
+        /* =========================================================
+           3. PEMBANTU HTML PECAHAN & ILUSTRASI SVG TEPAT
+           ========================================================= */
+        function fracHTML(num, den, size = '1.25rem') {
+            return `
+                <span class="frac-stack" style="font-size:${size}">
+                    <span>${num}</span>
+                    <span class="frac-bar"></span>
+                    <span>${den}</span>
+                </span>
+            `;
+        }
+
+        function getAvatarSVG(mood = 'happy') {
+            const mouth = mood === 'cheer'
+                ? `<path d="M86 106 Q100 124 114 106 Z" fill="#FF758F" stroke="#2B2D42" stroke-width="3"/>`
+                : mood === 'encourage'
+                ? `<path d="M90 112 Q100 118 110 112" fill="none" stroke="#2B2D42" stroke-width="4" stroke-linecap="round"/>`
+                : `<path d="M88 108 Q100 119 112 108" fill="none" stroke="#2B2D42" stroke-width="4" stroke-linecap="round"/>`;
+
+            return `
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="90" fill="#CDE8F6" stroke="#4EA8DE" stroke-width="8"/>
+                    <circle cx="100" cy="106" r="54" fill="#FFE5D9" stroke="#5C2C06" stroke-width="5"/>
+                    <path d="M46 98 C44 45, 156 45, 154 98 C144 72, 120 62, 100 72 C80 62, 56 72, 46 98 Z" fill="#3D2C2E"/>
+                    <polygon points="66,60 76,34 92,50 100,28 108,50 124,34 134,60" fill="#FFD166" stroke="#B45309" stroke-width="4"/>
+                    <circle cx="82" cy="100" r="6" fill="#2B2D42"/>
+                    <circle cx="84" cy="98" r="2.2" fill="#FFFFFF"/>
+                    <circle cx="118" cy="100" r="6" fill="#2B2D42"/>
+                    <circle cx="120" cy="98" r="2.2" fill="#FFFFFF"/>
+                    <ellipse cx="72" cy="113" rx="8" ry="4.5" fill="#FF758F" opacity="0.7"/>
+                    <ellipse cx="128" cy="113" rx="8" ry="4.5" fill="#FF758F" opacity="0.7"/>
+                    ${mouth}
+                </svg>
+            `;
+        }
+
+        function polarToXY(cx, cy, r, deg) {
+            const rad = ((deg - 90) * Math.PI) / 180;
+            return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+        }
+
+        function wedgePath(cx, cy, r, a1, a2) {
+            const p1 = polarToXY(cx, cy, r, a2);
+            const p2 = polarToXY(cx, cy, r, a1);
+            const large = a2 - a1 <= 180 ? '0' : '1';
+            return `M ${cx} ${cy} L ${p1.x} ${p1.y} A ${r} ${r} 0 ${large} 0 ${p2.x} ${p2.y} Z`;
+        }
+
+        // Rajah Bulat (Piza / Kek) SAMA SAIZ keseluruhan untuk Bahagian A
+        function renderCircleCompareSVG(num, den, shapeType = 'pizza') {
+            const step = 360 / den;
+            let paths = '';
+            for (let i = 0; i < den; i++) {
+                const colored = i < num;
+                const a1 = i * step;
+                const a2 = (i + 1) * step;
+                const mid = a1 + step / 2;
+                const outer = wedgePath(90, 90, 78, a1, a2);
+                const inner = wedgePath(90, 90, 65, a1, a2);
+                const dot = polarToXY(90, 90, 42, mid);
+
+                if (shapeType === 'pizza') {
+                    paths += `
+                        <path d="${outer}" fill="${colored ? '#F4A261' : '#E2E8F0'}" stroke="#7F4F24" stroke-width="2.2"/>
+                        <path d="${inner}" fill="${colored ? '#FFD166' : '#F8FAFC'}" stroke="#7F4F24" stroke-width="1.6"/>
+                        <circle cx="${dot.x}" cy="${dot.y}" r="5.5" fill="${colored ? '#EF476F' : '#CBD5E1'}"/>
+                    `;
+                } else {
+                    paths += `
+                        <path d="${outer}" fill="${colored ? '#FF758F' : '#E2E8F0'}" stroke="#590D22" stroke-width="2.2"/>
+                        <path d="${inner}" fill="${colored ? '#FFF0F3' : '#F8FAFC'}" stroke="#FFCCD5" stroke-width="1.4"/>
+                        <circle cx="${dot.x}" cy="${dot.y}" r="5" fill="${colored ? '#D90429' : '#CBD5E1'}"/>
+                    `;
+                }
+            }
+            return `<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">${paths}</svg>`;
+        }
+
+        // Rajah Bar Coklat SAMA SAIZ keseluruhan untuk Bahagian A
+        function renderBarCompareSVG(num, den) {
+            const totalW = 156;
+            const totalH = 74;
+            const startX = 12;
+            const startY = 53;
+            const cellW = totalW / den;
+
+            let cells = `<rect x="${startX - 5}" y="${startY - 5}" width="${totalW + 10}" height="${totalH + 10}" rx="12" fill="#E6CCB2" stroke="#7F5539" stroke-width="2.5"/>`;
+            for (let i = 0; i < den; i++) {
+                const colored = i < num;
+                const x = startX + i * cellW;
+                cells += `
+                    <rect x="${x}" y="${startY}" width="${cellW}" height="${totalH}" fill="${colored ? '#8D5524' : '#F1F5F9'}" stroke="#4A2511" stroke-width="2.2"/>
+                    <rect x="${x + 4}" y="${startY + 6}" width="${Math.max(4, cellW - 8)}" height="${totalH - 12}" rx="3" fill="${colored ? '#A46632' : '#E2E8F0'}"/>
+                `;
+            }
+            return `<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">${cells}</svg>`;
+        }
+
+        // Petunjuk bar kecil pada kad Bahagian B
+        function renderMiniFractionBar(num, den) {
+            const w = 90;
+            const h = 18;
+            const stepW = w / den;
+            let rects = '';
+            for (let i = 0; i < den; i++) {
+                rects += `<rect x="${3 + i * stepW}" y="2" width="${stepW}" height="${h}" fill="${i < num ? '#57CC99' : '#F1F5F9'}" stroke="#2B2D42" stroke-width="1.5"/>`;
+            }
+            return `<svg class="mini-bar-svg" viewBox="0 0 96 22" xmlns="http://www.w3.org/2000/svg">${rects}</svg>`;
+        }
+
+        /* =========================================================
+           4. DATA 12 SOALAN (BAHAGIAN A, BAHAGIAN B, BAHAGIAN C)
+           ========================================================= */
+        const ALL_QUESTIONS = [
+            // --- BAHAGIAN A: SIAPA LEBIH BESAR? (4 Soalan) ---
+            {
+                section: 'Bahagian A',
+                speech: 'Bandingkan dua bahagian piza yang sama saiz ini. Yang manakah lebih besar?',
+                type: 'compare',
+                shape: 'pizza',
+                f1: { num: 1, den: 2 },
+                f2: { num: 1, den: 4 },
+                correctChoice: 'first', // 'first', 'second', 'equal'
+                explanation: '1/2 (separuh piza) lebih besar daripada 1/4 (suku piza). Apabila sebiji piza dibahagikan kepada 2 bahagian sahaja, setiap potongannya lebih besar!'
+            },
+            {
+                section: 'Bahagian A',
+                speech: 'Kedua-dua kek ini mempunyai saiz yang sama. Pecahan kek manakah lebih besar?',
+                type: 'compare',
+                shape: 'cake',
+                f1: { num: 1, den: 3 },
+                f2: { num: 2, den: 3 },
+                correctChoice: 'second',
+                explanation: 'Penyebut kedua-dua pecahan adalah sama (3). 2 bahagian daripada 3 (2/3) lebih banyak daripada 1 bahagian daripada 3 (1/3).'
+            },
+            {
+                section: 'Bahagian A',
+                speech: 'Siasat dengan teliti! Bandingkan bahagian coklat yang berwarna pada kedua-dua bar ini.',
+                type: 'compare',
+                shape: 'bar',
+                f1: { num: 1, den: 2 },
+                f2: { num: 2, den: 4 },
+                correctChoice: 'equal',
+                explanation: '1/2 dan 2/4 meliputi kawasan berwarna yang sama panjang! Jadi, 1/2 dan 2/4 adalah SAMA BESAR.'
+            },
+            {
+                section: 'Bahagian A',
+                speech: 'Satu lagi cabaran perbandingan piza! Yang manakah lebih besar?',
+                type: 'compare',
+                shape: 'pizza',
+                f1: { num: 4, den: 5 },
+                f2: { num: 2, den: 5 },
+                correctChoice: 'first',
+                explanation: '4 bahagian daripada 5 (4/5) lebih besar daripada 2 bahagian daripada 5 (2/5) kerana lebih banyak hirisan piza yang berwarna.'
+            },
+
+            // --- BAHAGIAN B: SUSUN PECAHAN KECIL KE BESAR (4 Soalan) ---
+            {
+                section: 'Bahagian B',
+                speech: 'Susun 3 pecahan berikut daripada nilai PALING KECIL kepada PALING BESAR!',
+                type: 'sort',
+                cards: [
+                    { id: 'c1', num: 3, den: 4 },
+                    { id: 'c2', num: 1, den: 4 },
+                    { id: 'c3', num: 1, den: 2 }
+                ],
+                correctOrderIds: ['c2', 'c3', 'c1'], // 1/4 (0.25) < 1/2 (0.50) < 3/4 (0.75)
+                explanation: 'Susunan daripada kecil ke besar ialah 1/4, diikuti 1/2 (bersamaan 2/4), dan paling besar ialah 3/4.'
+            },
+            {
+                section: 'Bahagian B',
+                speech: 'Lihat petunjuk bar hijau pada setiap kad. Susun daripada paling kecil ke paling besar!',
+                type: 'sort',
+                cards: [
+                    { id: 'c1', num: 4, den: 5 },
+                    { id: 'c2', num: 1, den: 5 },
+                    { id: 'c3', num: 3, den: 5 }
+                ],
+                correctOrderIds: ['c2', 'c3', 'c1'], // 1/5 < 3/5 < 4/5
+                explanation: 'Semua penyebut adalah 5. Kita hanya susun pengangka dari kecil ke besar: 1/5, 3/5, dan 4/5.'
+            },
+            {
+                section: 'Bahagian B',
+                speech: 'Perhatikan saiz setiap bahagian! Susun pecahan berikut daripada kecil kepada besar.',
+                type: 'sort',
+                cards: [
+                    { id: 'c1', num: 1, den: 2 },
+                    { id: 'c2', num: 1, den: 6 },
+                    { id: 'c3', num: 1, den: 3 }
+                ],
+                correctOrderIds: ['c2', 'c3', 'c1'], // 1/6 < 1/3 < 1/2
+                explanation: 'Semakin banyak bahagian dibahagikan, semakin kecil saiz 1 bahagian. Jadi 1/6 paling kecil, diikuti 1/3, dan 1/2 paling besar.'
+            },
+            {
+                section: 'Bahagian B',
+                speech: 'Cabaran terakhir Bahagian B! Susun pecahan ini daripada paling kecil ke paling besar.',
+                type: 'sort',
+                cards: [
+                    { id: 'c1', num: 5, den: 8 },
+                    { id: 'c2', num: 2, den: 8 },
+                    { id: 'c3', num: 7, den: 8 }
+                ],
+                correctOrderIds: ['c2', 'c1', 'c3'], // 2/8 < 5/8 < 7/8
+                explanation: 'Susunan tertib menaik (kecil ke besar) bagi penyebut 8 ialah 2/8, 5/8, dan paling besar ialah 7/8.'
+            },
+
+            // --- BAHAGIAN C: MISI PENYELESAIAN MASALAH (4 Soalan) ---
+            {
+                section: 'Bahagian C',
+                speech: 'Baca cerita Ali dan Mira dengan teliti sebelum memilih jawapan!',
+                type: 'story',
+                questionHTML: 'Ali makan <strong>1/4</strong> piza manakala Mira makan <strong>3/4</strong> piza yang sama saiz. Siapakah yang makan lebih banyak?',
+                storySVG: `
+                    <svg viewBox="0 0 340 165" xmlns="http://www.w3.org/2000/svg">
+                        <text x="85" y="22" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="15" fill="#2B2D42">Ali (1/4)</text>
+                        <g transform="translate(25, 30) scale(0.66)">${renderCircleCompareSVG(1, 4, 'pizza')}</g>
+                        <text x="255" y="22" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="15" fill="#2B2D42">Mira (3/4)</text>
+                        <g transform="translate(195, 30) scale(0.66)">${renderCircleCompareSVG(3, 4, 'pizza')}</g>
+                    </svg>
+                `,
+                options: [
+                    { text: 'Ali', isCorrect: false },
+                    { text: 'Mira', isCorrect: true },
+                    { text: 'Sama banyak', isCorrect: false }
+                ],
+                explanation: 'Mira makan 3 bahagian daripada 4 (3/4), manakala Ali hanya makan 1 bahagian daripada 4 (1/4). Jadi, Mira makan lebih banyak!'
+            },
+            {
+                section: 'Bahagian C',
+                speech: 'Kira berapa bahagian kek yang diambil oleh ibu daripada 4 bahagian sama besar.',
+                type: 'story',
+                questionHTML: 'Sebiji kek dibahagikan kepada <strong>4 bahagian</strong> sama besar. Ibu mengambil <strong>2 bahagian</strong>. Apakah pecahan kek yang diambil oleh ibu?',
+                storySVG: `
+                    <svg viewBox="0 0 220 175" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(30, 5) scale(0.9)">${renderCircleCompareSVG(2, 4, 'cake')}</g>
+                    </svg>
+                `,
+                options: [
+                    { html: fracHTML(1, 4, '1.4rem'), isCorrect: false },
+                    { html: fracHTML(2, 4, '1.4rem'), isCorrect: true },
+                    { html: fracHTML(3, 4, '1.4rem'), isCorrect: false }
+                ],
+                explanation: 'Ibu mengambil 2 bahagian (pengangka = 2) daripada 4 bahagian sama besar (penyebut = 4). Jadi pecahannya ialah 2/4.'
+            },
+            {
+                section: 'Bahagian C',
+                speech: 'Bandingkan lukisan Aina dan Mei. Siapakah yang mewarnakan bahagian lebih banyak?',
+                type: 'story',
+                questionHTML: 'Aina mewarnakan <strong>2/5</strong> daripada satu gambar manakala Mei mewarnakan <strong>4/5</strong>. Siapakah yang mewarnakan bahagian lebih banyak?',
+                storySVG: `
+                    <svg viewBox="0 0 340 155" xmlns="http://www.w3.org/2000/svg">
+                        <text x="85" y="26" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="15" fill="#2B2D42">Aina (2/5)</text>
+                        <g transform="translate(10, 15) scale(0.83)">${renderBarCompareSVG(2, 5)}</g>
+                        <text x="255" y="26" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="15" fill="#2B2D42">Mei (4/5)</text>
+                        <g transform="translate(180, 15) scale(0.83)">${renderBarCompareSVG(4, 5)}</g>
+                    </svg>
+                `,
+                options: [
+                    { text: 'Aina', isCorrect: false },
+                    { text: 'Mei', isCorrect: true },
+                    { text: 'Sama banyak', isCorrect: false }
+                ],
+                explanation: '4/5 lebih besar daripada 2/5 kerana Mei mewarnakan 4 bahagian berbanding Aina yang hanya mewarnakan 2 bahagian.'
+            },
+            {
+                section: 'Bahagian C',
+                speech: 'Hati-hati dengan soalan terakhir ini! Kira bahagian coklat yang MASIH TINGGAL.',
+                type: 'story',
+                questionHTML: 'Sebatang coklat mempunyai <strong>8 bahagian</strong> sama besar. Jika <strong>3 bahagian</strong> telah dimakan, apakah pecahan coklat yang <u>masih tinggal</u>?',
+                storySVG: `
+                    <svg viewBox="0 0 260 155" xmlns="http://www.w3.org/2000/svg">
+                        <text x="130" y="24" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="14" fill="#5C2C06">3 dimakan (putih) • Baki coklat tinggal (perang)</text>
+                        <g transform="translate(40, 15) scale(1.0)">${renderBarCompareSVG(5, 8)}</g>
+                    </svg>
+                `,
+                options: [
+                    { html: fracHTML(3, 8, '1.4rem'), isCorrect: false },
+                    { html: fracHTML(5, 8, '1.4rem'), isCorrect: true },
+                    { html: fracHTML(8, 8, '1.4rem'), isCorrect: false }
+                ],
+                explanation: 'Daripada 8 bahagian, 3 telah dimakan (8 - 3 = 5). Jadi, masih tinggal 5 bahagian daripada 8 iaitu 5/8!'
+            }
+        ];
+
+        /* =========================================================
+           5. PENGURUSAN PERMAINAN & INTERAKSI PENGGUNA
+           ========================================================= */
+        let currentQIndex = 0;
+        let score = 0;
+        let hasMistakeOnCurrent = false;
+        let isQuestionSolved = false;
+
+        // Pemboleh ubah Bahagian B (Susun Pecahan)
+        let slotAssignments = [null, null, null];
+        let draggedCardId = null;
+
+        const startScreen = document.getElementById('start-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const endScreen = document.getElementById('end-screen');
+
+        const hudQNum = document.getElementById('hud-q-num');
+        const hudSection = document.getElementById('hud-section');
+        const hudProgressFill = document.getElementById('hud-progress-fill');
+        const hudScore = document.getElementById('hud-score');
+
+        const challengerFace = document.getElementById('challenger-face');
+        const challengerSpeech = document.getElementById('challenger-speech');
+        const questionTitle = document.getElementById('question-title');
+        const dynamicArena = document.getElementById('dynamic-arena');
+
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackHeading = document.getElementById('feedback-heading');
+        const feedbackDetail = document.getElementById('feedback-detail');
+        const btnNext = document.getElementById('btn-next');
+
+        document.getElementById('btn-start').addEventListener('click', () => {
+            playPopSound();
+            startGame();
+        });
+
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            playPopSound();
+            startGame();
+        });
+
+        document.getElementById('btn-sound').addEventListener('click', (e) => {
+            soundEnabled = !soundEnabled;
+            e.currentTarget.textContent = soundEnabled ? '🔊' : '🔇';
+            if (soundEnabled) playPopSound();
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (!isQuestionSolved) return;
+            playPopSound();
+            currentQIndex++;
+            if (currentQIndex < ALL_QUESTIONS.length) {
+                renderCurrentQuestion();
+            } else {
+                showVictoryScreen();
+            }
+        });
+
+        function startGame() {
+            currentQIndex = 0;
+            score = 0;
+            hudScore.textContent = '0';
+
+            startScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+
+            renderCurrentQuestion();
+        }
+
+        function renderCurrentQuestion() {
+            const q = ALL_QUESTIONS[currentQIndex];
+            hasMistakeOnCurrent = false;
+            isQuestionSolved = false;
+
+            // Kemas kini HUD
+            const num = currentQIndex + 1;
+            hudQNum.textContent = `Soalan ${num}/12`;
+            hudSection.textContent = q.section;
+            hudProgressFill.style.width = `${(num / 12) * 100}%`;
+
+            // Kemas kini Watak & Dialog
+            challengerFace.innerHTML = getAvatarSVG('happy');
+            challengerSpeech.textContent = q.speech;
+
+            // Tetapkan semula kotak maklum balas
+            feedbackBox.classList.add('hidden');
+            feedbackBox.classList.remove('correct', 'wrong');
+            btnNext.classList.add('hidden');
+
+            // Bina paparan mengikut jenis soalan
+            if (q.type === 'compare') {
+                renderPartA(q);
+            } else if (q.type === 'sort') {
+                renderPartB(q);
+            } else {
+                renderPartC(q);
+            }
+        }
+
+        /* ---------------------------------------------------------
+           BAHAGIAN A: SIAPA LEBIH BESAR?
+           --------------------------------------------------------- */
+        function renderPartA(q) {
+            questionTitle.innerHTML = `Bandingkan ${fracHTML(q.f1.num, q.f1.den, '1.35rem')} dengan ${fracHTML(q.f2.num, q.f2.den, '1.35rem')}. Yang manakah lebih besar?`;
+
+            const svg1 = q.shape === 'bar'
+                ? renderBarCompareSVG(q.f1.num, q.f1.den)
+                : renderCircleCompareSVG(q.f1.num, q.f1.den, q.shape);
+            const svg2 = q.shape === 'bar'
+                ? renderBarCompareSVG(q.f2.num, q.f2.den)
+                : renderCircleCompareSVG(q.f2.num, q.f2.den, q.shape);
+
+            dynamicArena.innerHTML = `
+                <div class="compare-arena">
+                    <div class="compare-box">
+                        ${svg1}
+                        <div class="compare-frac-label">${fracHTML(q.f1.num, q.f1.den, '1.45rem')}</div>
+                    </div>
+                    <div class="vs-pill">VS</div>
+                    <div class="compare-box">
+                        ${svg2}
+                        <div class="compare-frac-label">${fracHTML(q.f2.num, q.f2.den, '1.45rem')}</div>
+                    </div>
+                </div>
+                <div class="options-3-grid">
+                    <button class="choice-btn" data-choice="first">
+                        ${fracHTML(q.f1.num, q.f1.den, '1.4rem')}
+                        <span style="font-size:0.92rem; color:#5A6075;">Pecahan Pertama</span>
+                    </button>
+                    <button class="choice-btn" data-choice="second">
+                        ${fracHTML(q.f2.num, q.f2.den, '1.4rem')}
+                        <span style="font-size:0.92rem; color:#5A6075;">Pecahan Kedua</span>
+                    </button>
+                    <button class="choice-btn" data-choice="equal">
+                        <span style="font-size:1.5rem;">⚖️</span>
+                        <span>Sama Besar</span>
+                    </button>
+                </div>
+            `;
+
+            dynamicArena.querySelectorAll('.choice-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (isQuestionSolved) return;
+                    const picked = btn.getAttribute('data-choice');
+                    if (picked === q.correctChoice) {
+                        btn.classList.add('is-correct');
+                        dynamicArena.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+                        handleCorrect(q.explanation);
+                    } else {
+                        btn.classList.add('is-wrong');
+                        btn.disabled = true;
+                        handleWrong('Perhatikan semula luas kawasan yang berwarna pada kedua-dua gambar rajah sama saiz itu.');
+                    }
+                });
+            });
+        }
+
+        /* ---------------------------------------------------------
+           BAHAGIAN B: SUSUN PECAHAN (SERET & LEPAS + KETIK/ANAK PANAH)
+           --------------------------------------------------------- */
+        function renderPartB(q) {
+            questionTitle.textContent = 'Susun pecahan berikut daripada paling KECIL kepada paling BESAR:';
+            slotAssignments = [null, null, null];
+
+            dynamicArena.innerHTML = `
+                <div class="sort-guide">
+                    💡 Seret kad ke kotak di bawah <strong>ATAU</strong> ketik kad untuk memasukkan dan menyusunnya!
+                </div>
+                <div class="slots-row" id="slots-row">
+                    <div class="sort-slot" data-slot="0">
+                        <div class="slot-header">1. Paling Kecil</div>
+                        <div class="slot-body"></div>
+                    </div>
+                    <div class="sort-slot" data-slot="1">
+                        <div class="slot-header">2. Sederhana</div>
+                        <div class="slot-body"></div>
+                    </div>
+                    <div class="sort-slot" data-slot="2">
+                        <div class="slot-header">3. Paling Besar</div>
+                        <div class="slot-body"></div>
+                    </div>
+                </div>
+                <div class="cards-pool" id="cards-pool"></div>
+                <div>
+                    <button id="btn-check-sort" class="btn-cartoon btn-check">
+                        <span>Semak Susunan</span> <span>✅</span>
+                    </button>
+                </div>
+            `;
+
+            updateSortBoard(q);
+
+            // Pasang pendengar seret & lepas pada 3 slot
+            dynamicArena.querySelectorAll('.sort-slot').forEach(slotEl => {
+                const slotIdx = Number(slotEl.getAttribute('data-slot'));
+
+                slotEl.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (!isQuestionSolved) slotEl.classList.add('drag-over');
+                });
+
+                slotEl.addEventListener('dragleave', () => {
+                    slotEl.classList.remove('drag-over');
+                });
+
+                slotEl.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    slotEl.classList.remove('drag-over');
+                    if (isQuestionSolved || !draggedCardId) return;
+                    assignCardToSlot(draggedCardId, slotIdx, q);
+                    draggedCardId = null;
+                });
+            });
+
+            // Pasang pendengar seret & lepas pada kolam kad (untuk memulangkan kad)
+            const poolEl = document.getElementById('cards-pool');
+            poolEl.addEventListener('dragover', (e) => e.preventDefault());
+            poolEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (isQuestionSolved || !draggedCardId) return;
+                removeCardFromSlots(draggedCardId);
+                updateSortBoard(q);
+                draggedCardId = null;
+            });
+
+            // Butang Semak Susunan
+            document.getElementById('btn-check-sort').addEventListener('click', () => {
+                if (isQuestionSolved) return;
+                if (slotAssignments.includes(null)) {
+                    playGentleTrySound();
+                    feedbackBox.className = 'feedback-box wrong';
+                    feedbackHeading.textContent = 'Jangan putus asa! Cuba fikir dan jawab sekali lagi.';
+                    feedbackDetail.textContent = 'Sila masukkan kesemua 3 kad pecahan ke dalam kotak 1, 2 dan 3 terlebih dahulu sebelum menekan Semak Susunan.';
+                    feedbackBox.classList.remove('hidden');
+                    return;
+                }
+
+                const isOrderRight = slotAssignments.every((cid, idx) => cid === q.correctOrderIds[idx]);
+                if (isOrderRight) {
+                    document.getElementById('btn-check-sort').disabled = true;
+                    handleCorrect(q.explanation);
+                    updateSortBoard(q);
+                } else {
+                    handleWrong('Bandingkan panjang bahagian hijau pada setiap kad. Pastikan kad paling sedikit hijau berada di kotak 1 (Paling Kecil).');
+                }
+            });
+        }
+
+        function createFractionCardElement(cardObj, q, inSlotIndex = null) {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'frac-card';
+            cardEl.draggable = !isQuestionSolved;
+            cardEl.innerHTML = `
+                ${fracHTML(cardObj.num, cardObj.den, '1.5rem')}
+                ${renderMiniFractionBar(cardObj.num, cardObj.den)}
+            `;
+
+            cardEl.addEventListener('dragstart', () => {
+                draggedCardId = cardObj.id;
+            });
+
+            // Sokongan ketik/klik pantas (mesra telefon & tablet)
+            cardEl.addEventListener('click', () => {
+                if (isQuestionSolved) return;
+                playPopSound();
+                if (inSlotIndex !== null) {
+                    // Jika diketik di dalam slot, pulangkan ke kolam
+                    slotAssignments[inSlotIndex] = null;
+                } else {
+                    // Masukkan ke slot kosong pertama
+                    const emptyIdx = slotAssignments.indexOf(null);
+                    if (emptyIdx !== -1) {
+                        slotAssignments[emptyIdx] = cardObj.id;
+                    }
+                }
+                if (feedbackBox.classList.contains('wrong')) {
+                    feedbackBox.classList.add('hidden');
+                }
+                updateSortBoard(q);
+            });
+
+            return cardEl;
+        }
+
+        function assignCardToSlot(cardId, targetSlotIdx, q) {
+            playPopSound();
+            const existingSlotIdx = slotAssignments.indexOf(cardId);
+            const displacedCardId = slotAssignments[targetSlotIdx];
+
+            slotAssignments[targetSlotIdx] = cardId;
+            if (existingSlotIdx !== -1 && existingSlotIdx !== targetSlotIdx) {
+                slotAssignments[existingSlotIdx] = displacedCardId || null;
+            }
+            if (feedbackBox.classList.contains('wrong')) {
+                feedbackBox.classList.add('hidden');
+            }
+            updateSortBoard(q);
+        }
+
+        function removeCardFromSlots(cardId) {
+            const idx = slotAssignments.indexOf(cardId);
+            if (idx !== -1) {
+                playPopSound();
+                slotAssignments[idx] = null;
+            }
+        }
+
+        function updateSortBoard(q) {
+            const slotEls = dynamicArena.querySelectorAll('.sort-slot');
+            slotEls.forEach((slotEl, idx) => {
+                const bodyEl = slotEl.querySelector('.slot-body');
+                bodyEl.innerHTML = '';
+                const assignedId = slotAssignments[idx];
+
+                if (assignedId) {
+                    const cardObj = q.cards.find(c => c.id === assignedId);
+                    const cardEl = createFractionCardElement(cardObj, q, idx);
+                    if (isQuestionSolved) {
+                        cardEl.style.borderColor = '#2D6A4F';
+                        cardEl.style.backgroundColor = '#D4F4DD';
+                    }
+                    bodyEl.appendChild(cardEl);
+
+                    // Tambah butang anak panah kiri/kanan untuk memudahkan susunan semula pada telefon
+                    if (!isQuestionSolved) {
+                        const arrowsDiv = document.createElement('div');
+                        arrowsDiv.className = 'slot-arrows';
+
+                        if (idx > 0) {
+                            const leftBtn = document.createElement('button');
+                            leftBtn.className = 'arrow-mini-btn';
+                            leftBtn.type = 'button';
+                            leftBtn.textContent = '⬅️';
+                            leftBtn.title = 'Gerak ke kiri';
+                            leftBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                playPopSound();
+                                const temp = slotAssignments[idx - 1];
+                                slotAssignments[idx - 1] = assignedId;
+                                slotAssignments[idx] = temp;
+                                updateSortBoard(q);
+                            });
+                            arrowsDiv.appendChild(leftBtn);
+                        }
+
+                        if (idx < 2) {
+                            const rightBtn = document.createElement('button');
+                            rightBtn.className = 'arrow-mini-btn';
+                            rightBtn.type = 'button';
+                            rightBtn.textContent = '➡️';
+                            rightBtn.title = 'Gerak ke kanan';
+                            rightBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                playPopSound();
+                                const temp = slotAssignments[idx + 1];
+                                slotAssignments[idx + 1] = assignedId;
+                                slotAssignments[idx] = temp;
+                                updateSortBoard(q);
+                            });
+                            arrowsDiv.appendChild(rightBtn);
+                        }
+
+                        bodyEl.appendChild(arrowsDiv);
+                    }
+                } else {
+                    bodyEl.innerHTML = `<div class="slot-placeholder">Letak kad di sini</div>`;
+                }
+            });
+
+            // Paparkan kad yang belum disusun di dalam kolam kad
+            const poolEl = document.getElementById('cards-pool');
+            poolEl.innerHTML = '';
+            const unassignedCards = q.cards.filter(c => !slotAssignments.includes(c.id));
+
+            if (unassignedCards.length === 0) {
+                poolEl.innerHTML = `<div style="margin:auto; color:#7F4F24; font-weight:600;">Semua kad telah disusun! Tekan "Semak Susunan" ✅</div>`;
+            } else {
+                unassignedCards.forEach(c => {
+                    poolEl.appendChild(createFractionCardElement(c, q, null));
+                });
+            }
+        }
+
+        /* ---------------------------------------------------------
+           BAHAGIAN C: MISI PENYELESAIAN MASALAH
+           --------------------------------------------------------- */
+        function renderPartC(q) {
+            questionTitle.innerHTML = q.questionHTML;
+
+            dynamicArena.innerHTML = `
+                <div class="story-illustration">
+                    ${q.storySVG}
+                </div>
+                <div class="options-3-grid" id="story-options"></div>
+            `;
+
+            const optsContainer = document.getElementById('story-options');
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerHTML = opt.html ? opt.html : `<span>${opt.text}</span>`;
+
+                btn.addEventListener('click', () => {
+                    if (isQuestionSolved) return;
+                    if (opt.isCorrect) {
+                        btn.classList.add('is-correct');
+                        optsContainer.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+                        handleCorrect(q.explanation);
+                    } else {
+                        btn.classList.add('is-wrong');
+                        btn.disabled = true;
+                        handleWrong('Baca semula bilangan bahagian yang dinyatakan dalam cerita dan cuba pilih sekali lagi.');
+                    }
+                });
+
+                optsContainer.appendChild(btn);
+            });
+        }
+
+        /* ---------------------------------------------------------
+           6. MAKLUM BALAS JAWAPAN & SKRIN KEMENANGAN
+           --------------------------------------------------------- */
+        function handleCorrect(explanationText) {
+            isQuestionSolved = true;
+
+            // Beri 10 markah bagi setiap soalan yang berjaya diselesaikan
+            score += 10;
+            hudScore.textContent = score;
+
+            challengerFace.innerHTML = getAvatarSVG('cheer');
+            challengerSpeech.textContent = 'Hebat sekali! Teruskan semangat juara kamu!';
+
+            playSuccessSound();
+            spawnCelebration(50, false);
+
+            feedbackBox.className = 'feedback-box correct';
+            feedbackHeading.textContent = 'Tahniah! Kamu memang Juara Pecahan! 🏆';
+            feedbackDetail.textContent = explanationText;
+
+            btnNext.innerHTML = currentQIndex === ALL_QUESTIONS.length - 1
+                ? '<span>Lihat Pingat Juara</span> <span>🥇</span>'
+                : '<span>Seterusnya</span> <span>➡️</span>';
+            btnNext.classList.remove('hidden');
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function handleWrong(hintText) {
+            hasMistakeOnCurrent = true;
+
+            challengerFace.innerHTML = getAvatarSVG('encourage');
+            challengerSpeech.textContent = 'Tidak mengapa! Detektif yang hebat sentiasa menyemak semula.';
+
+            playGentleTrySound();
+
+            feedbackBox.className = 'feedback-box wrong';
+            feedbackHeading.textContent = 'Jangan putus asa! Cuba fikir dan jawab sekali lagi.';
+            feedbackDetail.textContent = hintText;
+            btnNext.classList.add('hidden');
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function showVictoryScreen() {
+            gameScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+
+            document.getElementById('final-score').textContent = score;
+            const rewardTitle = document.getElementById('reward-title');
+            const victoryMsg = document.getElementById('victory-message');
+
+            playVictoryFanfare();
+            spawnCelebration(95, true);
+
+            if (score >= 100) {
+                rewardTitle.textContent = 'Juara Pecahan Emas 🥇';
+                victoryMsg.textContent = 'Syabas! Pencapaian emas yang sangat cemerlang! Kamu memang pakar membanding, menyusun, dan menyelesaikan masalah Pecahan Wajar Tahun 2! 🌟';
+            } else if (score >= 80) {
+                rewardTitle.textContent = 'Juara Pecahan Perak 🥈';
+                victoryMsg.textContent = 'Tahniah! Kamu berjaya memenangi pingat perak! Sedikit lagi latihan pasti kamu akan meraih pingat emas! 👏';
+            } else if (score >= 60) {
+                rewardTitle.textContent = 'Juara Pecahan Gangsa 🥉';
+                victoryMsg.textContent = 'Bagus! Kamu berjaya menamatkan semua 12 cabaran dan membawa pulang pingat gangsa! Teruskan usaha! 😊';
+            } else {
+                rewardTitle.textContent = 'Teruskan Berlatih! ⭐';
+                victoryMsg.textContent = 'Tahniah kerana berjaya menghabiskan kesemua cabaran! Mari tekan Main Semula untuk mengumpul lebih banyak markah! 💪';
+            }
+        }
+    </script>
+</body>
+</html>
